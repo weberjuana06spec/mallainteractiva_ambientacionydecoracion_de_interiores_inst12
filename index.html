@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malla Interactiva</title>
+<style>
+  body {
+    margin: 0;
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  canvas {
+    border: 1px solid white;
+  }
+</style>
+</head>
+<body>
+<canvas id="malla"></canvas>
+
+<script>
+const canvas = document.getElementById("malla");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const spacing = 50; // tamaño de las celdas
+function dibujarMalla() {
+  ctx.strokeStyle = "#555";
+  ctx.lineWidth = 1;
+
+  for (let x = 0; x < canvas.width; x += spacing) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  for (let y = 0; y < canvas.height; y += spacing) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
+function resaltarCelda(mouseX, mouseY) {
+  const col = Math.floor(mouseX / spacing);
+  const row = Math.floor(mouseY / spacing);
+
+  ctx.fillStyle = "rgba(0, 255, 0, 0.3)";
+  ctx.fillRect(col * spacing, row * spacing, spacing, spacing);
+}
+
+function render(mouseX, mouseY) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  dibujarMalla();
+  if (mouseX && mouseY) {
+    resaltarCelda(mouseX, mouseY);
+  }
+}
+
+render();
+
+canvas.addEventListener("mousemove", (e) => {
+  render(e.clientX, e.clientY);
+});
+</script>
+</body>
+</html>
